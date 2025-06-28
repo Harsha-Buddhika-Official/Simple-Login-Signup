@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { User } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -9,7 +10,7 @@ function SignUp() {
 
     const handleSubmit = e => {
         e.preventDefault()
-        axios.post('' , {name, email, password: password})
+        axios.post('http://localhost:3001/register' , {name, email, password: password})
         .then (res => console.log(res))
         .catch(err => console.error(err));
     }
@@ -30,7 +31,7 @@ function SignUp() {
                                 id="FullName" 
                                 name="FullName" 
                                 placeholder='Full Name'
-                                onChange={(e) = setName(e.target.value)}
+                                onChange={(e) => setName(e.target.value)}
                                 required 
                                 className="border rounded px-3 py-2 bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
@@ -42,7 +43,7 @@ function SignUp() {
                                 id="Email" 
                                 name="Email" 
                                 placeholder='Email'
-                                onChange={(e) = setEmail(e.target.value)}
+                                onChange={(e) => setEmail(e.target.value)}
                                 required 
                                 className="border rounded px-3 py-2 bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
@@ -54,7 +55,7 @@ function SignUp() {
                                 id="password" 
                                 name="password"
                                 placeholder='Password'
-                                onChange={(e) = setPassword(e.target.value)}
+                                onChange={(e) => setPassword(e.target.value)}
                                 required
                                 className="border rounded px-3 py-2 bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
@@ -70,7 +71,7 @@ function SignUp() {
                             <Link
                                 to="/login"
                                 className="text-blue-600 hover:underline font-medium cursor-pointer"
-                            >
+                                >
                                 Log in
                             </Link>
                         </div>
