@@ -15,6 +15,8 @@ app.post('/register', (req,res) => {
     .catch(err => res.json(err))
 })
 
-app.listen(3001, () => {
-  console.log('Server is running on port 3000');
+const port = 3000;
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });

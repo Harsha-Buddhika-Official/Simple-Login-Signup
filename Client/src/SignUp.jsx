@@ -1,19 +1,29 @@
 import React, { useState } from 'react';
 import { User } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
+import { registerUser } from './authService';
 
 function SignUp() {
-    const [name, setName] = useState();
-    const [email, setEmail] = useState();
-    const [password, setPassword] = useState();
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
-    const handleSubmit = e => {
-        e.preventDefault()
-        axios.post('http://localhost:3001/register' , {name, email, password: password})
-        .then (res => console.log(res))
-        .catch(err => console.error(err));
-    }
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await registerUser({ name, email, password });
+            if (response.data) {
+                alert('Registration successful!');
+                navigate('/login');
+            } else {
+                alert('Registration failed. Please try again.');
+            }
+        } catch (error) {
+            console.error('Registration error:', error);
+            alert('Registration failed. Please try again.');
+        }
+    };
 
     return (
         <div className='bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200'>
@@ -23,7 +33,7 @@ function SignUp() {
                         <User />
                         <h1 className="text-xl font-semibold">Sign Up</h1>
                     </div>
-                    <form action="" onSubmit={handleSubmit} className='flex flex-col gap-4 '>
+                    <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
                         <div className="flex flex-col">
                             <label htmlFor="FullName" className="mb-1 text-sm">Name</label>
                             <input 
@@ -31,6 +41,7 @@ function SignUp() {
                                 id="FullName" 
                                 name="FullName" 
                                 placeholder='Full Name'
+                                value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 required 
                                 className="border rounded px-3 py-2 bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -43,6 +54,7 @@ function SignUp() {
                                 id="Email" 
                                 name="Email" 
                                 placeholder='Email'
+                                value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required 
                                 className="border rounded px-3 py-2 bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -55,6 +67,7 @@ function SignUp() {
                                 id="password" 
                                 name="password"
                                 placeholder='Password'
+                                value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                                 className="border rounded px-3 py-2 bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -62,7 +75,7 @@ function SignUp() {
                         </div>
                         <button
                             type="submit"
-                            className="self-center max-w-[50%] w-full py-2 px-4 rounded-[10px] bg-blue-600 text-white font-semibold border-2 border-blue-700 hover:bg-blue-700 hover:border-blue-800 transition-colors duration-200 shadow cursor-pointer "
+                            className="self-center max-w-[50%] w-full py-2 px-4 rounded-[10px] bg-blue-600 text-white font-semibold border-2 border-blue-700 hover:bg-blue-700 hover:border-blue-800 transition-colors duration-200 shadow cursor-pointer"
                         >
                             Submit
                         </button>
@@ -71,7 +84,7 @@ function SignUp() {
                             <Link
                                 to="/login"
                                 className="text-blue-600 hover:underline font-medium cursor-pointer"
-                                >
+                            >
                                 Log in
                             </Link>
                         </div>
