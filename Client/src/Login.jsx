@@ -1,26 +1,33 @@
 import { User } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
     const navigate = useNavigate();
 
     const handleLogin = (e) => {
         e.preventDefault();
+        setError('');
         axios.post('http://localhost:3000/login', { email, password })
             .then(response => {
-                console.log('Login successful:', response);
-                alert('Login successful!');
-                navigate('/home');
+                if (response.data.success) {
+                    alert('Login successful!');
+                    navigate('/home');
+                } else {
+                    setError(response.data.message || 'Login failed.');
+                }
             })
             .catch(error => {
-                console.error('Login failed:', error);
+                if (error.response && error.response.data && error.response.data.message) {
+                    setError(error.response.data.message);
+                } else {
+                    setError('An error occurred. Please try again.');
+                }
             });
-        console.log('Login attempted with:', { email, password });
-
     }
 
     return (
@@ -31,6 +38,9 @@ function Login() {
                         <User />
                         <h1 className="text-xl font-semibold">Login</h1>
                     </div>
+                    {error && (
+                        <div className="mb-4 text-red-600 text-center font-medium">{error}</div>
+                    )}
                     <form action="" className='flex flex-col gap-4'>
                         <div className="flex flex-col">
                             <label htmlFor="Email" className="mb-1 text-sm">Email</label>
